@@ -1,0 +1,28 @@
+1. Tworzenie archiwum
+   a) Pliki
+       $ tar -cvf nowy.tar plik1 ~/SCR/plik2
+       Tworzy archiwum "nowy.tar" zawierajace dwa pliki.
+       Plik1 zostanie zapisany z sama nazwa,
+       a plik2 z oryginalna sciezka do pliku.
+   b) Struktura katalogow
+       $ tar -cvf nowy.tar Folder1
+       Tworzy archiwum z podanym folderem.
+       Archiwum jest zapisywane galeziami.
+       Program dochodzi no najglebszego miejsca w strukturze katalogow,
+       kiedy zapisze jego zawartosc schodzi o jeden poziom nizej
+       i dalej przeszukuje galezie, az zidentyfikuje cala zawartosc
+       bazowego katalogu (Folder1)
+2. Odtwarzanie do pierwotnej lokacji
+   a) Do pierwotnej lokacji
+   b) Do wybranej lokacji
+       $ tar -xf nowy.tar --directory ~/Downloads d1/plik1
+       '--directory' umozliwia wskazanie, gdzie chcemy odtworzyc plik
+   c) Pojedynczego pliku
+       $ tar -xf nowy.tar --strip-component 3 d1/d12/d121/plik121
+       Odtworzy tylko plik121 w obecnej lokalizacji.
+       '--strip-component 3' usuwa trzy pozycje z podanej sciezki do pliku.
+       Bez tej opcji, tar odtworzylby cala strukture pliku
+3. Sposob zapisu plikow
+   Jezeli zapisalismy plik przez podanie calej sciezki,
+   tak tez musimy sie do niego odwolywac. Jezeli uzylismy nazwy lokalnej,
+   do odtwarzania wystarczy wpisanie tej nazwy. 
