@@ -1,0 +1,14 @@
+Potok fifo tworzymy komenda $mknode fifo_p p
+Stan procesow mozemy oczytac przez komendy 'top' lub 'ps a'
+ 
+  Dla dwoch skryptow zapisujacych i dwoch czytajacych,
+system wydaje sie dawac skryptom dostep do pliku zgodnie z kolejnoscia,
+z jaka wysylaja one zapytanie o dostep.
+  Wpisy ze skryptow 4a i 4c zostaja wysylane do fifo naprzemiennie.
+Dobrze widac to dla jednego uruchomionego skryptu czytajacego.
+  Jezeli jeden ze skryptow czytajacych napotka pusty plik, przechodzi on w stan
+'interruptable sleep' (mozliwe do przerwania uspienie).
+  Jezeli najpierw uruchomimy oba skrypty czytajace, a pozniej zapisujacy,
+mozemy zauwazyc, ze oba czytajace przejda w stan uspienia,
+a po zapisie pierwszym skryptem odczytujacym bedzie ten,
+ktory pierwszy wszedl w stan uspienia.
