@@ -1,0 +1,22 @@
+Poleceniem ulimit nalezy ustawic max liczbe procesow.
+  W tym przypadku ustawiam limit na 50.
+  $ulimit -u 50
+
+Nastepnie nalezy uruchomic forkbombe zawarta w script8.sh
+  $./script8.sh
+
+Dzieki wykorzystaniu 'ulimit -u 50' system nie pozwoli
+na uruchomienie zbyt duzej liczby procesow, a tym samym
+zapobiegnie zawieszeniu systemu.
+
+Jezeli w tym momencie sprobowalbym pozabijac utworzone procesy,
+w miejsce zabitego, ktorys z pozostalych kopii procesu,
+wstawilby jego nowy odpowiednik.
+Dlatego tez najpierw nalezy zatrzymac wszystkie procesy.
+  $kill -STOP -2
+Nastepnie mozna wznowic procesy niezwiazane z forkbomba
+  $kill -CONT 'PID'
+A na koniec pozabijac wszystkie procesy forkbomby
+  $kill -9 'PID'
+Zatrzymane procesy nie beda tworzyly nowych instancji,
+co umozliwi ich uprzatniecie.

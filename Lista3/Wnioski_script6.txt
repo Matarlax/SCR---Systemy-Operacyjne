@@ -1,0 +1,12 @@
+
+Wyslanie do procesu 2899 sygnalu 19(SIGSTOP)
+powoduje taki sam efekt jak skrot klawiszowy Ctrl+Z.
+Proces zostaje zatrzymany
+$kill -19 2899
+
+Wyslanie do zatrzymanego procesu sygnalu 18(SIGCONT)
+powoduje taki sam efekt jak kontynuowanie procesu komenda bg,
+ktora wznawia proces, ale nie blokuje terminala.
+$kill -18 2899
+
+Komenda fg zajmuje terminal wznowionym procesem.

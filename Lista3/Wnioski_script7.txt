@@ -1,0 +1,27 @@
+Sprawdzanie liczby 'nice' procesow.
+  Za ten numer odpowiada kolumna NI.
+  $ps l
+  Mozna go rowniez sprawdzic poleceniem top
+  $top
+
+Dzialanie obnizonego liczba 'nice' priorytetu.
+  W jednym terminalu uruchamiam polecenie 'top'.
+  $top
+  W kilku kolejnych uruchamiam kilka razy ten sam skrypt.
+  $sh script7.sh
+  W terminalu z 'top' widac, ze wszystkie procesy ze skryptem
+  maja podobne wartosci %CPU.
+  Po zmianie 'nice' jednego z nich na 10 otrzymuje on mniej mocy procesora,
+  co widac w terminalu z uruchomionym 'top'
+  $renice 10 3551
+
+
+Dla procesu nr 3551 o nice='0'.
+  Podwyzszanie nice z '0' do '10':
+  $renice 10 3551
+
+  Obnizanie nice z '10' do '1':
+  $sudo renice 1 3551
+
+  Podwyzszanie moze zostac wykonane do max wartosci 19.
+  Obnizanie moze zostac wykonane tylko z pomoca 'sudo'.
