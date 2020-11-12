@@ -1,0 +1,15 @@
+Napisalem program w jezyku 'c'. Plik z kodem to 'program1.c'.
+Skompilowalem go jako plik wykonawczy 'Program1' przez komende:
+  $gcc -o Program1 program1.c
+I wywoluje przez:
+  $./Program1
+'program1' wyswietla komunikat na standardowym wyjsciu,
+po czym przechodzi do nieskonczonej petli - while(1){++i}
+
+  Na oddzielnym terminalu sprawdziem komenda 'top',
+ze 'Program1' zajmuje ok 90%CPU, po czym zamknalem go Ctrl-C.
+  Przed funkcja 'main()' dodalem biblioteke 'unistd.h',
+zawierajaca funkcje 'sleep()', ktora dodalem do wnetrza petli.
+  Po ponownej kompilacji i uruchomieniu program nie znajdowal sie
+na szczycie listy 'top', poniewaz przez wiekszosc czasu dzialania
+znajduje sie on w stanie uspienia.

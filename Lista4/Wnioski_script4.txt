@@ -1,0 +1,47 @@
+Po uruchomieniu programu sprawdzilem jego PID, po czym przeszedlem do
+lokalizacji /proc/PID/ i wpisalem komende:
+ $cat status
+Znajduje sie tam tablica akcji przypisanych poszczegolnym sygnalom.
+jest to 16 cyfr w systemie heksadecymalnym, ktorych odpowiednik binarny
+pokazuje jakie akcje zostana podjete w przypadku danego sygnalu. Np.
+SigIgn 0000000000000800 --- ignoruje sygnal 12(SIGUSR2)
+lub
+SigIgn 0000000000000a00 --- ignoruje sygnal 12 i 10(SIGUSR1)
+800(16)=1000000(2)
+a00(16)=1010000(2)
+Po wpisaniu '$kill -l' wyswietla sie lista 64 sygnalow, kompatybilnych
+z oznaczeniami w pliku 'status'.
+
+W folderze /proc mozna sprawdzic kolejnosc wystepowania polecen w potoku.
+Uruchomilem 3 programy przez komende:
+ $./Program2 | ./Program2 | ./Program2
+Powstaly w ten sposob 3 procesy uruchomione w potoku.
+W folderze '/proc/PID/fd' znajduja sie linki do
+0-standard input
+1-standard output
+2-standard error
+Sprawdzajac te lokalizacje dla kazdego z tych procesow,
+przez komende 'ls -l' mozna sprawdzic, ze sa one powiazane potokiami.
+Wejscie pierwszego to terminal, na ktorym zostal uruchomiony potok.
+Wyjscie pierwszego to wejscie drugiego,
+a wyjscie drugiego to wejscie trzeciego.
+Wyjscie trzeciego to ten sam terminal.
+==============================================================
+mati@mati-VirtualBox:/proc/5173/fd$ ls -l
+total 0
+lrwx------ 1 mati mati 64 lis 12 14:46 0 -> /dev/pts/1
+l-wx------ 1 mati mati 64 lis 12 14:46 1 -> 'pipe:[122750]'
+lrwx------ 1 mati mati 64 lis 12 14:46 2 -> /dev/pts/1
+==============================================================
+mati@mati-VirtualBox:/proc/5174/fd$ ls -l
+total 0
+lr-x------ 1 mati mati 64 lis 12 14:43 0 -> 'pipe:[122750]'
+l-wx------ 1 mati mati 64 lis 12 14:43 1 -> 'pipe:[122752]'
+lrwx------ 1 mati mati 64 lis 12 14:43 2 -> /dev/pts/1
+==============================================================
+mati@mati-VirtualBox:/proc/5175/fd$ ls -l
+total 0
+lr-x------ 1 mati mati 64 lis 12 14:46 0 -> 'pipe:[122752]'
+lrwx------ 1 mati mati 64 lis 12 14:46 1 -> /dev/pts/1
+lrwx------ 1 mati mati 64 lis 12 14:46 2 -> /dev/pts/1
+==============================================================

@@ -1,0 +1,44 @@
+Wykorzystalem wczesniejszy program i uzupelnilem go o obsluge sygnalow
+SIGALRM(14),SIGTERM(15),SIGUSR1(10),SIGUSR2(12)
+================================================================================
+a) Wyswietlenie komunikatu i zakonczenie pracy programu
+--Definiowanie obslugi SIGALRM:
+   signal(SIGALRM, signal_handler)
+--Definicja:
+   if (signal_type == SIGALRM)
+    {
+      printf("Przechwycony SIGALRM. Koncze program.\n");
+      exit(0);
+    }
+================================================================================
+b) Wyswietlenie komunikatu i powrot do wykonywania programu
+--Definiowanie obslugi SIGTERM:
+   signal(SIGTERM, signal_handler)
+--Definicja:
+   if (signal_type == SIGTERM)
+    printf("Przechwycony SIGTERM. Kontynuuje program.\n");
+================================================================================
+c) Wstrzymywanie odebrania sygnalu na 10 iteracji petli i wznowienie odbierania
+--Definiowanie obslugi SIGUSR1:
+   signal(SIGUSR1, signal_handler)
+--Definicja:
+   *** Zmienna globalna ***********************************************
+   static int sigusr1_block=10;
+   *** W funkcji 'signal_handler(int signal_type)' ********************
+   if (signal_type == SIGUSR1)
+    {
+      if(sigusr1_block==10)
+	{
+	  printf("Przechwycony SIGUSR1. Ignorowany przez 10 petli.\n");
+	  sigusr1_block=0;
+	}
+      /*Jak nie bedzie rowne 10, nie rob nic(ignoruj)*/
+    }
+    *** W petli while(1) **********************************************
+    if(sigusr1_block<10)
+      ++sigusr1_block;
+================================================================================
+d) Calkowite ignorowanie sygnalu
+--Definiowanie ignorowania SIGUSR2:
+   signal(SIGUSR2, SIG_IGN)
+================================================================================
