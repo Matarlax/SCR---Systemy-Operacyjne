@@ -1,0 +1,70 @@
+1.Wykonanie programu HelloWorld.
+  Strace zwraca polecenia systemowe wywolane podczas uruchamiania danego procesu.
+  Kazde polecenie zaczyna sie od nowej linii i ma postac:
+   nazwa(argumenty)=wartosc_zwrocona
+  Wywoluje strace poleceniem:
+   $strace ./HelloWorld
+  Na terminalu pojawilo sie 30 nowych linii tekstu.
+  Ostatnie 4 linie odpowiadaly za wyswietlenie 'Hello World!' na standardowym wyjsciu
+  i zakonczeniu programu z kodem '0':
+   write(1, "Hello World!\n", 13Hello World!
+   )          = 13
+   exit_group(0)                           = ?
+   +++ exited with 0 +++
+  Cala reszta wywolan sluzyla uruchomieniu procesu, zaladowaniu odpowiednich bibliotek
+  oraz plikow konfiguracyjnych oraz sprawdzeniu ustawnien terminala, z ktorego wystapilo
+  wywolanie.
+=============================================================================================
+2.Znajdowanie plikow konfiguracyjnych odczytywanych przy starcie powloki
+   $strace -e openat bash 
+  Aby odczytac pliki konfiguracyjne bash musi je otworzyc, sledze wiec tylko komende openat.
+  Bash probowal odczytac nastepujace pliki konfiguracyjne:
+  a) Systemowe pliki konfiguracyjne - znajdujace sie w lokalizacji '/etc/'.
+     Glownie zawieraja ustawienia globalne powloki. Np. 'bashrc':
+      openat(AT_FDCWD, "/etc/bash.bashrc", O_RDONLY) = 3
+  b) Pliki konfiguracyjne uzytkownika - znajdujace sie w katalogu domowym '~/'.
+     Posiadaja dodatkowe ustawienia i w niektorych przypadkach moga nadpisywac ustawione
+     przez konfiguracje globalne ustawienia. Np. 'bashrc','bash_history'.
+      openat(AT_FDCWD, "/home/mati/.bashrc", O_RDONLY) = 3
+      openat(AT_FDCWD, "/home/mati/.bash_history", O_RDONLY) = 3
+=============================================================================================
+3.Czy plik edytowany w programie 'pico' jest stale otwarty?
+   $strace -o log.txt -e trace=openat,close,read pico program6.c
+  Nie, pico(nano) otwiera edytowany plik wtedy, kiedy chce go nadpisac.
+  Ostatnie linijki log.txt:
+    openat(AT_FDCWD, "/home/mati/SCR/Lista4/program6.c", O_WRONLY|O_CREAT|O_APPEND, 0666) = 3
+    close(3)                                = 0
+    read(0, "a", 1)                         = 1
+    openat(AT_FDCWD, "/etc/passwd", O_RDONLY|O_CLOEXEC) = 3
+    close(3)                                = 0
+    openat(AT_FDCWD, "./.program6.c.swp", O_WRONLY|O_CREAT|O_EXCL|O_APPEND, 0666) = 3
+    close(3)                                = 0
+    read(0, "l", 1)                         = 1
+    read(0, "a", 1)                         = 1
+    read(0, "\177", 1)                      = 1
+    read(0, "\177", 1)                      = 1
+    read(0, "\177", 1)                      = 1
+    read(0, "\23", 1)                       = 1
+    openat(AT_FDCWD, "program6.c", O_WRONLY|O_CREAT|O_TRUNC, 0666) = 3
+    close(3)                                = 0
+    read(0, "\30", 1)  
+    +++ exited with 0 +++
+  Na ich podstawie mozna stwierdzic, ze wpisanie slowa 'ala' i usuniecie go
+  zostalo wykonane przy zamknietym pliku 'program6.c'.
+  Zostal on otworzony przez 'openat' dopiero po kombinacji CTRL+S.
+=============================================================================================
+4.File deskryptory aplikacji wyswietlajacej HelloWorld!
+  Kazdy proces ma 3 standardowe file deskryptory.
+  0->STDIN
+  1->STDOUT
+  2->STDERR
+  Dodatkowo, jezeli jakas funkcja wymaga do dzialania swojego wlasnego file descriptora,
+  tworzy sie nowy FD, o nastepnym numerze (dlatego zazwyczaj 3).
+  Wywoluje strace dla programu poleceniem:
+   $strace ./HelloWorld
+  W informacji zwrotnej mozna zauwazyc obecnosc FD '1' i '3'.
+  '1' dla polecenia systemowego write() piszacego na standardowym wyjsciu (1->STDOUT).
+    write(1, "Hello World!\n", 13Hello World!
+    )          = 13
+  '3' stworzony dla pliku "/etc/ld.so.cache"
+   openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3

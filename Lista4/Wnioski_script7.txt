@@ -1,0 +1,16 @@
+Blad w programie wystepowal w trakcie realizacji petli for().
+Nie istnial warunek blokujacy wykonywanie petli.
+Printf odczytywal kolejne elementy tablicy,
+po czym wyszedl poza jej zakres i zaczal odczytywac pamiec nienalezaca
+do programu. W koncu trafil na pamiec, do ktorej nie mial dostepu
+i proces zostal zakonczony bledem "Segmentation fault" przez sygnal SIGSEGV.
+     0.000183 --- SIGSEGV {si_signo=SIGSEGV, si_code=SEGV_MAPERR, si_addr=0x55a58f944000} ---
+     0.235361 +++ killed by SIGSEGV (core dumped) +++
+Segmentation fault (core dumped)
+
+Linia strace, w ktorej wystapil blad:
+   0.000353 write(1, "Witajcie moi mili ...\0\0\0\1\33\3;8\0\0\0"..., 1024Witajcie moi mili ...;8���������$���T.����d��������,zrx
+
+Do pomiaru czasu wykonania poszczegolnych elementow programu mozna wykorzystac flage '-r'.
+ $strace -r ./Program7
+Wyswietla ona czas wykonania kazdego polecenia systemowego.

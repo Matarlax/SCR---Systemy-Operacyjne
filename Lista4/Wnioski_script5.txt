@@ -1,0 +1,41 @@
+Program strace sluzy do debuggowania procesow w systemie.
+1.Sledzenie wykonywania dowolnej komendy/pliku_wykonawczego
+   $strace 'polecenie'
+  Np. '$strace ls' pokaze dzialania,
+  jakie wykonuja sie podczas realizowania polecenia 'ls'.
+  '$strace ./program.exe' pokaze dzialania realizowane podczas wykonywania
+  pliku 'program.exe'.
+2.Wyswietlanie tylko wybranych polecen systemowych flaga '-e'
+   $strace -e access ls
+  Bez tej flagi strace wyswietli wszystkie polecenia systemowe
+  wykonywane przez polecenie 'ls'. Po jej uzyciu na standardowym wyjsciu
+  pojawia sie tylko wpisy o wykorzystywaniu polecenia 'access'.
+  Mozna sledzic wiele polecen przez komende '-e trace='
+   $strace -e trace=access,fstat ls
+  Wyswietli polecenia 'access' i 'fstat' uzyte podczas polecenia 'ls'
+3.Zapisywanie wyniku sledzenia do pliku przez flage '-o'
+   $strace -o StraceLog_ls.txt ls
+  Na standardowym wyjsciu wyswietli tylko wynik 'ls',
+  a wyjscie 'strace' zostanie zapisane do pliku 'StraceLog_ls.txt'.
+4.Sledzenie juz uruchomionego procesu flaga '-p' i PID
+   $sudo strace -p 2255
+  Sprawdzilem PID przegladarki firefox i wprowadzilem je za flaga -p.
+  W wyniku tej operacji na standardowym wyjsciu na biezaco wyswietlaly sie
+  kolejne wpisy o wywolaniach systemowych w trakcie dzialania przegladarki.
+  Polecenie konczy dzialanie, kiedy proces zakonczy dzialanie
+  lub zabije sie proces 'strace'.
+  Flagi mozna laczyc, aby na biezaco dopisywac wynik strace do pliku.
+   $sudo strace -p 2255 -o StraceLog_firefox.txt
+5.Wyswietlenie godziny wykonania danego polecenia systemowego flaga '-t'
+   $strace -t ls
+  Przed kazdym poleceniem systemowym pojawi sie godzina w formacie
+  gg:mm:ss.
+6.Wyswietlenie czasu realizacji kazdego polecenia flaga '-r'
+   $strace -r ls
+  Przed kazdym poleceniem systemowym pojawi sie czas jego realizacji
+  w sekundach z szescioma miejscami po przecinku (dokladnosc do 1us).
+7.Wyswietlenie tabeli statystyk wywolania polecenia flaga '-c'
+   $strace -c ls -R ~/
+  Wyswietli wynik 'ls -R ~/', a nastepnie tabele wszystkich wystepujacych
+  podczas jego wykonywania polecen systemowych. Dla kazdego polecenia:
+  czas[%] | czas[s] | sredni_czas/wywolanie | wywolania | bledy | nazwa 
