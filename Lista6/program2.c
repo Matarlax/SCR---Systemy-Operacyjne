@@ -17,7 +17,7 @@
 
 int main()
 {
-  int fd_txt,fd_map, exist=1;
+  int fd_txt,fd_map;
   char file_name[32];
   char *file_in_memory;
   struct stat file_stat;
@@ -27,11 +27,8 @@ int main()
   if(fork()==0)
     {
       // === Szukaj pliku co sekunde ===
-      while(exist)
-	{
-	  exist=access("plik_map",F_OK);
+      while(access("plik_map",F_OK))
 	  sleep(1);
-	}
       // === Jesli istnieje to wyskoczy z petli i wyswietli ===
       execlp("display","","-update","1","plik_map",NULL);
     }
