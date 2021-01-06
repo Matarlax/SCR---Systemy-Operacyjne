@@ -1,0 +1,11 @@
+=== bug5.c =======================================================
+Kiedy main() zakonczy tworzenie watkow, wyswietla printf()
+i konczy proces wywolaniem exit().
+Wywolanie to zamyka wszystkie watki pracujace w danym procesie.
+W celu pozwolenia na dzialanie reszty istniejacych watkow,
+na koncu main() nalezy dodac linie:
+ pthread_exit(NULL);
+Komenda konczy dzialanie glownego watku, ale pozwala na dzialanie
+pozostalych, omijajac wywolanie exit().
+Kiedy wszystkie watki procesu zostana zamkniete,
+nastepuje normalne zakonczenie procesu.

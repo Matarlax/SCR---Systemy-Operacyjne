@@ -1,0 +1,27 @@
+=== W jaki sposob do watku przekazywany jest pojedynczy argument ===
+Jako zmienna przekazywana w czwartym argumencie funkji pthread_create().
+Argument ten jest rzutowany na (void*), czyli wskaznik uniwersalny.
+
+=== Jak przekazac wiele argumentow przez strukture =================
+Najpierw tworzona jest struktura
+  struct thread_data thread_data_array[];
+Nastepnie do zmiennych w strukturze przypisywane sa dane.
+  thread_data_array[t].thread_id=t; (...)
+Struktura rzutowana na (void*) jest przekazywana jak zmienna.
+  pthread_create( , , , (void*)&thread_data_array[t]);
+Wewnatrz wykonywanej funkcji tworzy sie nowy wskaznik
+na oryginalny typ struktury.
+  struct thread_data *my_data;
+Do wskaznika przypisywany jest argument rzutowany na odpowiedni typ.
+  my_data= (struct thread_data*) threadarg;
+
+=== bug3.c =========================================================
+W programie do funkcji watku przekazywany byl adres zmiennej 't',
+przez co kiedy watek wykonal 'sleep(1)',
+przypisywal zmiennej 'taskid' w funkcji obecna wartosc 't',
+zamiast wartosci istniejacej w trakcie tworzenia watku.
+
+ W main():
+  pthread_create( , , , (void*)&t) -> pthread_create( , , , (void*)t)
+ W *printHello():
+         taskid = *(long*)threadid -> taskid=(long)threadid 

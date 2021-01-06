@@ -1,0 +1,25 @@
+=== Wnioski ================================
+Kolejnosc wyswietlania wyjsc watkow nie zawsze jest taka sama.
+Linux implementuje wielozadaniowosc z wywlaszczaniem.
+Oznacza to, ze system operacyjny decyduje o dostepie watkow do procesora.
+Kazdy watek ma przydzielony okreslony czas,
+po ktorego uplynieciu zostaje odsuniety,
+a kwant czasu zostaje przydzielony nowemu watkowi.
+
+=== Kompilacja =============================
+$gcc -o Prog2 hello32.c -lm -Wall -pthread
+
+=== hello32.c ==============================
+// funkcja - void *Hello(void *threadid)
+  Usypia watek na 3s
+  10000 powtorzen petli z obliczeniami
+  Wyswietl wynik.
+  Zamknij watek.
+// main()
+        t - licznik watkow
+       rc - czy stworzono watek
+  threads - tablica watkow
+  W petli tworza sie kolejno 32 watki,
+  kazdy z nich wykonuje funkcje *Hello(void)
+  Wyswietl ile stworzono watkow.
+  Zamknij watek.
