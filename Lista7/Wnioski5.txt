@@ -1,0 +1,28 @@
+//=====================================================================
+  Skompilowany program join.c dzialal poprawnie.
+//=====================================================================
+  Polecenie wymaga, zeby zmodyfikowac program tak,
+aby watki zwracaly rozne wartosci.
+Wszystkie watki zwracaja swoj przypisany numer ID,
+wiec zwracaja rozne wartosci. Nie modyfikowalem programu.
+ -Jezeli chodzi o obliczanie innych wartosci result,
+mozna np. uzyc rand() lub kazde sin(i)*tan(i) mnozyc przez 'tid';
+ -Jezeli chodzi o zwracanie wartosci roznych od ich numerow ID,
+mozna zastosowac np. 'pthread_exit((void*)rand());'
+//=====================================================================
+  Skompilowany program detached.c dzialal poprawnie.
+//=====================================================================
+  Roznica miedzy programami polega na wykorzystywaniu wartosci,
+zwracanych przez watki poboczne, przez watek glowny.
+  W join.c kazdy watek konczy linia 'pthread_exit((void*)t);',
+dzieki czemu kazdy watek konczy dzialanie zwracajac wskaznik
+zawierajacy nr ID danego watku. W main() wystepuje funkcja
+'pthread_join(thread[t],&status);' sprawdza ona z jaka wartosc
+zwrocil dany watek. 
+Jezeli watek nie zakonczyl dzialania, funkcja czeka.
+Jezeli watek zakonczyl sie wczesniej, natychmiastowo zwraca wartosc.
+Jezeli watek zwraca NULL, funkcja zwraca 0.
+Jezeli nie znajdzie watku, funkcja zwraca blad. 
+  W detached.c main() nie wykorzystuje wartosci zwracanych przez watki.
+Datego tez w funkcji '*BusyWork(void *t)' nie ma linii
+'pthread_exit((void*)t)', a w main nie ma czesci kodu z 'pthread_join()'

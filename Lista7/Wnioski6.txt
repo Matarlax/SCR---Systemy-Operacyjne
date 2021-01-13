@@ -1,0 +1,13 @@
+//======================================================================
+  Program bug2.c konczy sie przez 'Segmentation fault'
+//======================================================================
+  Program bug2.c tworzy watki z ustawieniami domyslnymi,
+wiec rozmiar stosu dla takiego watku wynosi 2MB. Kazdy 'double' zabiera
+8B pamieci, co pomnozone przez 2mln daje 16MB.
+Wykonujac funkcje '*Hello()', watek probuje powolac tablice
+'double A[2000000]' o wielkosci 16MB, posiadajac tylko 2MB.
+'Segmentation fault' pojawia sie podczas wywolania systemowego mmap(),
+probujacego zainicjalizowac tablice.
+//======================================================================
+  Program bug2fix.c dziala poprawnie, poniewaz ustawia pamiec watku
+przed jego stworzeniem (rozmiar tablicy+dodatkowo).
